@@ -1,1 +1,32 @@
-pkg/config/.env
+# Binaries for programs and plugins
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+
+# Output of the Go coverage tool
+*.out
+
+# Go workspace
+bin/
+pkg/
+vendor/
+
+# Environment files
+*.env
+**/.env
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
