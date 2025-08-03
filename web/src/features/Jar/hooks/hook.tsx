@@ -1,0 +1,1 @@
+//Il aura tou les usestates pour récupérer les datas du backend et less traiter pour que le JArPage ne fasse que du frontend
