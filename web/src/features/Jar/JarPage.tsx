@@ -11,6 +11,7 @@ function JarPage() {
         <>
             <p className="text-center text-3xl underline">Jars</p>
             <Jars jars={jarsData} />
+            <div>History</div> ///Rajouter un composant pour l'historique
         </>
     )
 }
