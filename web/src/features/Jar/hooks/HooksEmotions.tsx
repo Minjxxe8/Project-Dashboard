@@ -1,10 +1,9 @@
 //Il aura tou les usestates pour récupérer les datas du backend et less traiter pour que le JArPage ne fasse que du frontend
 
-// src/hooks/useEmojis.ts
 
 import { useEffect, useState } from "react";
 import type {EmojiOption} from "../../typescript/emojiOptions.ts";
-import {fetchEmojis} from "../api/fetch.tsx";
+import {fetchEmojis} from "../api/FetchJar.tsx";
 
 
 export function useEmojis() {

@@ -1,30 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 
-interface FloatingInputProps {
-    label: string;
-    type?: string;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+interface DatePickerProps {
+    label?: string;
+    value?: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const FloatingInput: React.FC<FloatingInputProps> = ({
-        label,
-        type = "text",
-        value,
-        onChange,
-}) => {
-    const [, setIsFocused] = useState(false);
-
+export const DatePicker: React.FC<DatePickerProps> = ({
+                                                          label,
+                                                          value,
+                                                          onChange,
+                                                      }) => {
     return (
         <div className="relative w-full">
             <input
-                type={type}
+                type="date"
                 value={value}
                 onChange={onChange}
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
                 className="peer w-full border-b-2 border-gray-300 bg-transparent pt-6 pb-2 text-sm text-gray-900 placeholder-transparent focus:border-blue-500 focus:outline-none"
-                placeholder={label}
+                placeholder=" "
             />
             <label
                 className={`

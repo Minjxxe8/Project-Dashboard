@@ -2,7 +2,7 @@
 import Jars from "./components/Jar.tsx";
 
 const jarsData = [
-    { name: "Souvenirs" },
+    { name: "Souveniiiiiirs" },
     { name: "Potins" },
 ]
 
@@ -11,7 +11,7 @@ function JarPage() {
         <>
             <p className="text-center text-3xl underline">Jars</p>
             <Jars jars={jarsData} />
-            <div>History</div> ///Rajouter un composant pour l'historique
+            <div className="underline text-blue-500 cursor-pointer hover:text-purple-500 block">History</div>
         </>
     )
 }

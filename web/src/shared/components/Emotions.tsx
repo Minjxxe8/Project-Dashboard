@@ -1,5 +1,5 @@
 
-import { useEmojis } from "../../features/Jar/hooks/hook.tsx";
+import { useEmojis } from "../../features/Jar/hooks/HooksEmotions.tsx";
 
 interface EmojiSelectorProps {
     onSelect?: (emoji: string) => void;
@@ -14,7 +14,7 @@ export default function EmojiSelector({ onSelect }: EmojiSelectorProps) {
         setSelectedIndex,
     } = useEmojis();
 
-    if (loading) return <p className="text-gray-500">Chargement...</p>;
+    if (loading) return <p className="text-gray-500">Loading...</p>;
 
     const handleClick = async (index: number) => {
         setSelectedIndex(index);
