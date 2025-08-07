@@ -22,7 +22,7 @@ const Table: React.FC = () => {
                     <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Note</th>
                     <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Review</th>
                     <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Date</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700">Edit</th>
+                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700"></th>
                 </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">

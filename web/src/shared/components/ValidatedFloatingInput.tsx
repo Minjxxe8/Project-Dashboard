@@ -2,10 +2,10 @@ import React, { useState } from "react";
 
 interface ValidatedFloatingInputProps {
     label: string;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    value?: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     required?: boolean;
-    height?: string;
+    height: string;
 }
 
 export const ValidatedFloatingInput: React.FC<ValidatedFloatingInputProps> = ({
@@ -17,7 +17,8 @@ export const ValidatedFloatingInput: React.FC<ValidatedFloatingInputProps> = ({
   }) => {
     const [touched, setTouched] = useState(false);
 
-    const isError = required && touched && value.trim() === "";
+    // @ts-ignore
+    const isError = required && touched && value === "";
 
     return (
         <div className="relative w-full mb-4">
