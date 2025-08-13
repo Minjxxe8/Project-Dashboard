@@ -32,7 +32,13 @@ const JarTable: React.FC = () => {
                 {memories.map((memory) => (
                     <tr key={memory.name}>
                         <td className="px-4 py-3 text-sm text-gray-800">{memory.title}</td>
-                        <td className="px-4 py-3">{memory.name}</td>
+                        <td className="px-4 py-3">
+                            {Array.isArray(memory.name)
+                                ? (memory.name.length > 2
+                                    ? `${memory.name[0]}, ${memory.name[1]}...`
+                                    : memory.name.join(', '))
+                                : memory.name}
+                        </td>
                         <td className="px-4 py-3 text-sm text-gray-800">
                             {memory.occuredAt.split("T")[0]}
                         </td>
