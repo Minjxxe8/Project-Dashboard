@@ -20,7 +20,7 @@ function ReviewsPage() {
                     className="py-4 px-6 rounded-xl cursor-pointer border border-black hover:bg-black hover:text-white">Add
                     Reviews
                 </button>
-                <Table/>
+                <Table />
             </div>
 
             {showPopup && <ReviewsPopup onclose={() => setShowPopup(false)} /> }

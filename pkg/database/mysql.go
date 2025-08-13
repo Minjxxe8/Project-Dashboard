@@ -6,8 +6,9 @@ import (
 	"github.com/joho/godotenv"
 	"log"
 	"os"
-	Project_Dashboard "project-dashboard"
 )
+
+var DB *pgx.Conn
 
 func Init() {
 	err := godotenv.Load()
@@ -20,18 +21,16 @@ func Init() {
 		log.Fatal("DATABASE_URL est vide, vérifie ton .env")
 	}
 
-	conn, err := pgx.Connect(context.Background(), dsn)
+	DB, err = pgx.Connect(context.Background(), dsn)
 	if err != nil {
 		log.Fatalf("Échec de connexion à la base : %v", err)
 	}
-	defer conn.Close(context.Background())
 
 	var version string
-	if err := conn.QueryRow(context.Background(), "SELECT version()").Scan(&version); err != nil {
+	if err := DB.QueryRow(context.Background(), "SELECT version()").Scan(&version); err != nil {
 		log.Fatalf("Requête échouée : %v", err)
 	}
 
 	log.Println("Connecté à :", version)
 
-	Project_Dashboard.RunServer(conn)
 }

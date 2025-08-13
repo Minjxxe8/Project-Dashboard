@@ -12,14 +12,21 @@ export async function fetchEmojis() {
 
 export interface Memory {
     name: string;
-    date: string;
+    occuredAt: string;
     content: string;
     title: string;
     emotion: string;
     jar: string;
 }
 
-export async function createMemory(memory: Memory) {
+export async function createMemory(memory: {
+    name: string[];
+    occuredAt: string;
+    content: string;
+    title: string;
+    emotion: string;
+    jar: any
+}) {
     try {
         const response = await fetch("http://localhost:8080/api/memories", {
             method: "POST",

@@ -1,6 +1,6 @@
-//import JarPage from "../features/Jar/JarPage.tsx";
+import JarPage from "../features/Jar/JarPage.tsx";
 import SideBar from "../shared/SideBar.tsx";
-import ReviewsPage from "../features/reviews/ReviewsPage.tsx";
+//import ReviewsPage from "../features/reviews/ReviewsPage.tsx";
 
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
       <>
         <SideBar />
           <main className="relative h-screen ml-[200px] pt-10">
-              <ReviewsPage />
+              <JarPage />
           </main>
       </>
   )
