@@ -75,7 +75,7 @@ function JarPopup({ onClose, jarName }: { onClose: () => void; jarName : any }) 
                     <ValidatedFloatingInput
                         label="Memorie"
                         value={content}
-                        height="h-55"
+                        height="h-40"
                         onChange={(e) => setContent(e.target.value)}
                     />
                 </div>

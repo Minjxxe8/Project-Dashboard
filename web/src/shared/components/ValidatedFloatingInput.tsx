@@ -3,7 +3,7 @@ import React, { useState } from "react";
 interface ValidatedFloatingInputProps {
     label: string;
     value?: string;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
     required?: boolean;
     height: string;
 }
@@ -13,7 +13,7 @@ export const ValidatedFloatingInput: React.FC<ValidatedFloatingInputProps> = ({
       value,
       onChange,
       required = true,
-        height,
+        height = "h-24",
   }) => {
     const [touched, setTouched] = useState(false);
 
@@ -22,8 +22,7 @@ export const ValidatedFloatingInput: React.FC<ValidatedFloatingInputProps> = ({
 
     return (
         <div className="relative w-full mb-4">
-            <input
-                type="text"
+            <textarea
                 value={value}
                 onChange={onChange}
                 onBlur={() => setTouched(true)}

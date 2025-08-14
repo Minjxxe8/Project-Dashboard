@@ -1,10 +1,21 @@
-import React from "react";
+import React, {useState} from "react";
 import { MemoriesList } from "../hooks/HooksJarData.tsx";
+import MemoryCard from "./MemoryCard.tsx";
 
 
 const JarTable: React.FC = () => {
 
+
+    const [showPopup, setShowPopup] = useState(false);
+    const [selectedMemory, setSelectedMemory] = useState<string | null>(null);
     const { memories, loading, error } = MemoriesList();
+
+    const handleRowClick = (memory : any) => {
+        console.log("Row clicked:", memory);
+        setSelectedMemory(memory);
+        setShowPopup(true);
+        return
+    }
 
     if (loading) {
         return <p className="text-gray-500">Loading...</p>;
@@ -30,7 +41,7 @@ const JarTable: React.FC = () => {
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                 {memories.map((memory) => (
-                    <tr key={memory.name}>
+                    <tr key={memory.name} className="cursor-pointer hover:bg-gray-50" onClick={() => handleRowClick(memory)}>
                         <td className="px-4 py-3 text-sm text-gray-800">{memory.title}</td>
                         <td className="px-4 py-3">
                             {Array.isArray(memory.name)
@@ -43,16 +54,23 @@ const JarTable: React.FC = () => {
                             {memory.occuredAt.split("T")[0]}
                         </td>
 
-                        <td className="px-4 py-3 text-sm text-gray-700">{memory.content}</td>
+                        <td className="px-4 py-3 text-sm text-gray-700 w-200">
+                            {memory.content.length > 500 ? `${memory.content.slice(0, 500)}...` : memory.content}
+                        </td>
                         <td className="px-4 py-3 text-sm text-gray-500">{memory.emotion}</td>
                         <td className="px-4 py-3 text-sm text-gray-500 text-center">{memory.jar}</td>
-                        <td className="px-4 py-3 text-center">
-                            <button className="text-blue-600 hover:underline cursor-pointer text-sm font-medium">Edit</button>
-                        </td>
                     </tr>
                 ))}
                 </tbody>
             </table>
+
+            {showPopup && selectedMemory &&
+                <MemoryCard
+                    memory={selectedMemory}
+                    onClose={() => { setShowPopup(false) }}
+                />
+            }
+
         </div>
     );
 };
