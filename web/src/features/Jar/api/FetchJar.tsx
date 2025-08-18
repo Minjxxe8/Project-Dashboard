@@ -40,7 +40,6 @@ export async function createMemory(memory: {
             const errorText = await response.text();
             throw new Error(`API Error: ${errorText}`);
         }
-
         return await response.json();
     } catch (error) {
         console.error("Error when creating memory", error);

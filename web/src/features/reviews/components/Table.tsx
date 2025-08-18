@@ -11,6 +11,7 @@ const Table: React.FC = () => {
     if (loading) {
         return <p className="text-gray-500">Loading...</p>;
     }
+    
 
     return (
         <div className="overflow-x-auto rounded-lg shadow-md mt-8">
