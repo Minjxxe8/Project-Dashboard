@@ -3,12 +3,14 @@ import {DatePicker} from "../../../shared/components/DatePicker.tsx";
 import {useState} from "react";
 import {ValidatedFloatingInput} from "../../../shared/components/ValidatedFloatingInput.tsx";
 import {fetchReviews} from "../api/FetchReviews.tsx";
+import CategorySelect from "./CategorySelector.tsx";
 
 export default function ReviewsPopup( { onclose }: { onclose: () => void }) {
 
     const [value, setValue] = useState(5);
 
     const [title, setTitle] = useState("");
+    const [category, setCategory] = useState<number | "">("");
     const [rating, setRating] = useState(5);
     const [selectedDate, setSelectedDate] = useState("");
     const [review, setReview] = useState("");
@@ -27,6 +29,7 @@ export default function ReviewsPopup( { onclose }: { onclose: () => void }) {
             rating: value,
             occuredAt: new Date(selectedDate).toISOString(),
             review,
+            category: category !== "" ? category.toString() : undefined,
             file
         };
 
@@ -53,7 +56,16 @@ export default function ReviewsPopup( { onclose }: { onclose: () => void }) {
                 <div className="absolute top-6 right-10 cursor-pointer" onClick={onclose}>X</div>
                 <h2 className="text-2xl text-center mb-3">Add Reviews</h2>
 
-                <FloatingInput value={title} onChange={e => setTitle(e.target.value)} label="Title"/>
+                <div className="flex gap-6">
+                    <FloatingInput value={title} onChange={e => setTitle(e.target.value)} label="Title"/>
+                    <CategorySelect onChange={value => {
+                        if (typeof value !== "number") {
+                            setCategory(1);
+                        } else {
+                            setCategory(Number(value));
+                        }
+                    }} />
+                </div>
 
                 <div className="flex gap-6 items-center my-5">
                     <input type="range" min={0} max={10} value={rating} onChange={e => {

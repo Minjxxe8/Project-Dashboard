@@ -1,16 +1,21 @@
 import {useEffect, useState} from "react";
-import type {Review} from "../../typescript/ReviewsOptions.ts";
-import {fetchReviews} from "../api/FetchReviews.tsx";
+import {getReviews, type Reviews} from "../api/GetReviews.tsx";
 
 export function useReviews() {
-    const [reviews, setReviews] = useState<Review[]>([]);
+    const [reviews, setReviews] = useState<Reviews[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        const load = async () => {
-            const data = await fetchReviews();
-            setReviews(data);
-            setLoading(false);
+        async function load()  {
+            try {
+                const data = await getReviews();
+                setReviews(data);
+            } catch (err : any) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
         };
         load();
     }, []);
@@ -18,6 +23,7 @@ export function useReviews() {
     return {
         reviews,
         loading,
+        error
     };
 }
 

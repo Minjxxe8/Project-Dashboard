@@ -1,15 +1,16 @@
-export interface Memory {
-    name: string;
-    occuredAt: string;
-    content: string;
+export interface Reviews {
+    id: string
     title: string;
-    emotion: string;
-    jar: string;
+    rating: number;
+    occuredAt: string;
+    review: string;
+    category: number;
+    file: File | null;
 }
 
-export async function getJar() {
+export async function getReviews() {
     try {
-        const response = await fetch(`http://localhost:8080/api/memories/all`, {
+        const response = await fetch(`http://localhost:8080/api/reviews/all`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -23,7 +24,7 @@ export async function getJar() {
 
         return await response.json();
     } catch (error) {
-        console.error("Error when getting jar", error);
+        console.error("Error when getting reviews", error);
         throw error;
     }
 }

@@ -3,6 +3,7 @@ export async function fetchReviews(review: {
     rating: number;
     occuredAt: string;
     review: string;
+    category: number;
     file: File | null;
 }) {
     try {

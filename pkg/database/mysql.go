@@ -2,13 +2,14 @@ package database
 
 import (
 	"context"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
+	"time"
 )
 
-var DB *pgx.Conn
+var DB *pgxpool.Pool
 
 func Init() {
 	err := godotenv.Load()
@@ -21,7 +22,17 @@ func Init() {
 		log.Fatal("DATABASE_URL est vide, vérifie ton .env")
 	}
 
-	DB, err = pgx.Connect(context.Background(), dsn)
+	config, err := pgxpool.ParseConfig(dsn)
+	if err != nil {
+		log.Fatalf("Erreur config pool : %v", err)
+	}
+
+	config.MaxConns = 10
+	config.MinConns = 2
+	config.MaxConnLifetime = time.Hour
+	config.MaxConnIdleTime = time.Minute * 30
+
+	DB, err = pgxpool.NewWithConfig(context.Background(), config)
 	if err != nil {
 		log.Fatalf("Échec de connexion à la base : %v", err)
 	}
@@ -33,4 +44,10 @@ func Init() {
 
 	log.Println("Connecté à :", version)
 
+}
+
+func Close() {
+	if DB != nil {
+		DB.Close()
+	}
 }

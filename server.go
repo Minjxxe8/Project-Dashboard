@@ -2,10 +2,11 @@ package Project_Dashboard
 
 import (
 	"encoding/json"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"log"
 	"net/http"
 	"project-dashboard/internal/jar"
+	"project-dashboard/internal/reviews"
 )
 
 func corsMiddleware(next http.Handler) http.Handler {
@@ -21,7 +22,7 @@ func corsMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-func RunServer(conn *pgx.Conn) {
+func RunServer(pool *pgxpool.Pool) {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
@@ -29,9 +30,13 @@ func RunServer(conn *pgx.Conn) {
 		json.NewEncoder(w).Encode(map[string]string{"message": "pong"})
 	})
 
-	//Les routes
+	// Jars Handlers
 	mux.HandleFunc("/api/memories", jar.AddMemoryHandler)
 	mux.HandleFunc("/api/memories/all", jar.GetAllMemoriesHandler)
+
+	// Reviews Handlers
+	mux.HandleFunc("/api/reviews", reviews.AddReviewHandler)
+	mux.HandleFunc("/api/reviews/all", reviews.GetAllReviewsHandler)
 
 	handler := corsMiddleware(mux)
 
