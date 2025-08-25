@@ -14,8 +14,8 @@ func InsertReview(review Review) error {
 	}
 	defer tx.Rollback(ctx)
 
-	err = tx.QueryRow(ctx, "INSERT INTO reviews (title, rating, review_date, content, photo_url, category_id) VALUES ($1, $2, $3::date, $4, $5, $6) RETURNING id",
-		review.Title, review.Rating, review.OccuredAt, review.Review, review.File, review.CategoryID).Scan(&review.CategoryID)
+	err = tx.QueryRow(ctx, "INSERT INTO reviews (title, rating, review_date, content, emotion, photo_url,category_id) VALUES ($1, $2, $3::date, $4, $5, $6) RETURNING category_id",
+		review.Title, review.Rating, review.OccuredAt, review.Review, review.File, review.Emotion, review.CategoryID).Scan(&review.CategoryID)
 	if err != nil {
 		return err
 	}
@@ -28,7 +28,7 @@ func GetAllReviews() ([]Review, error) {
 	defer cancel()
 
 	rows, err := database.DB.Query(ctx, `
-		SELECT title, rating, review_date, content, photo_url, category_id
+		SELECT title, rating, review_date, content, photo_url, emotion, category_id
 		FROM reviews
 	`)
 	if err != nil {
@@ -39,7 +39,7 @@ func GetAllReviews() ([]Review, error) {
 	var reviews []Review
 	for rows.Next() {
 		var review Review
-		if err := rows.Scan(&review.Title, &review.Rating, &review.OccuredAt, &review.Review, &review.File, &review.CategoryID); err != nil {
+		if err := rows.Scan(&review.Title, &review.Rating, &review.OccuredAt, &review.Review, &review.File, &review.Emotion, &review.CategoryID); err != nil {
 			return nil, err
 		}
 		reviews = append(reviews, review)

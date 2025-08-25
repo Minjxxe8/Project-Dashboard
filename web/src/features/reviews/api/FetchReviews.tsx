@@ -3,8 +3,9 @@ export async function fetchReviews(review: {
     rating: number;
     occuredAt: string;
     review: string;
-    category: number;
+    category: number | undefined;
     file: File | null;
+    emotion: string;
 }) {
     try {
         const response = await fetch("http://localhost:8080/api/reviews", {

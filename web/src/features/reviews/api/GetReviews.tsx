@@ -1,11 +1,11 @@
 export interface Reviews {
-    id: string
     title: string;
     rating: number;
     occuredAt: string;
     review: string;
     category: number;
     file: File | null;
+    emotion: string;
 }
 
 export async function getReviews() {

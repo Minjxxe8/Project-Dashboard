@@ -8,5 +8,6 @@ type Review struct {
 	OccuredAt  time.Time `json:"occuredAt"`
 	Review     string    `json:"review"`
 	File       string    `json:"file"`
-	CategoryID string    `json:"category"`
+	Emotion    string    `json:"emotion"`
+	CategoryID int       `json:"category"`
 }
