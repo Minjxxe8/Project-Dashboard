@@ -6,12 +6,22 @@ import (
 	"os"
 	"os/signal"
 	Project_Dashboard "project-dashboard"
+	"project-dashboard/internal/auth"
 	"project-dashboard/pkg/database"
 	"syscall"
 )
 
 func main() {
 	database.Init()
+
+	auth.NewAuth()
+
+	if auth.Store == nil {
+		log.Fatal("Error: Gothic store is not initialized")
+	} else {
+		log.Println("Gothic store successfully initialized")
+	}
+
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 
