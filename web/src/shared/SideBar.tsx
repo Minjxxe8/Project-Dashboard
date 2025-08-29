@@ -11,6 +11,9 @@ function SideBar() {
                     <li>
                         <Link to="/reviews" className="hover:text-gray-400">Reviews Page</Link>
                     </li>
+                    <li>
+                        <Link to="/projects" className="hover:text-gray-400">Project Page</Link>
+                    </li>
                 </ul>
             </nav>
         </aside>
