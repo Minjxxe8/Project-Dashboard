@@ -4,19 +4,27 @@ import {useState} from "react";
 import { ValidatedFloatingInput } from "../../../shared/components/ValidatedFloatingInput.tsx"
 import EmojiSelector from "../../../shared/components/Emotions.tsx";
 import {createMemory} from "../api/FetchJar.tsx";
+import {MultiNameInput} from "./MultiNameInput.tsx";
 
 function JarPopup({ onClose, jarName }: { onClose: () => void; jarName : any }) {
 
-    const [name, setName] = useState("");
+    const [name, setName] = useState<string[]>();
     const [selectedDate, setSelectedDate] = useState("");
     const [content, setContent] = useState("");
     const [title, setTitle] = useState("");
     const [emotion, setEmotion] = useState("");
+    const [error, setError] = useState(false);
 
     const handleSubmit = async () => {
+        if (!name || !selectedDate || !content || !title || !emotion) {
+            console.error("All fields are required");
+            setError(true)
+            return;
+        }
+
         const memoryData = {
             name,
-            date: selectedDate,
+            occuredAt: new Date(selectedDate).toISOString(),
             content,
             title,
             emotion,
@@ -33,47 +41,57 @@ function JarPopup({ onClose, jarName }: { onClose: () => void; jarName : any }) 
     }
 
     return (
-        <div
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 h-[600px] w-[950px] rounded-2xl shadow-[0px_0px_67px_34px_rgba(0,_0,_0,_0.1)] flex flex-col p-10 backdrop-blur-3xl border-1">
-             <div className="absolute top-6 right-10 cursor-pointer" onClick={onClose}>X</div>
+        <>
+            { error && (
+                <div className="absolute top-2 bg-red-500 text-white z-30 py-3 px-4 rounded-lg text-center w-fit left-1/2 -translate-x-1/2">
+                    All fields are required
+                </div>
+            )}
+            {setTimeout(() => setError(false), 3000)}
 
-            <h1 className="text-2xl text-center">Add {jarName}</h1>
+            <div
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 h-[600px] w-[950px] rounded-2xl shadow-[0px_0px_67px_34px_rgba(0,_0,_0,_0.1)] flex flex-col p-10 backdrop-blur-3xl border-1">
+                <div className="absolute top-6 right-10 cursor-pointer" onClick={onClose}>X</div>
 
-            <div>
-                <FloatingInput label="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
-            </div>
+                <h1 className="text-2xl text-center">Add {jarName}</h1>
 
-            <div className="flex mt-6">
-                <div className="w-1/2 pr-5">
-                    <FloatingInput label="Name" value={name} onChange={(e) => setName(e.target.value)}/>
+                <div>
+                    <FloatingInput label="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
                 </div>
 
-                <div className=" w-1/2 pr-5">
-                    <DatePicker label="Choose a date" value={selectedDate}
-                                onChange={(e) => setSelectedDate(e.target.value)}/>
+                <div className="flex mt-6">
+                    <div className="w-1/2 pr-5">
+                        <MultiNameInput label="Name(s)" values={name ?? []} onChange={setName} />
+                    </div>
+
+
+                    <div className=" w-1/2 pr-5">
+                        <DatePicker label="Choose a date" value={selectedDate}
+                                    onChange={(e) => setSelectedDate(e.target.value)}/>
+                    </div>
                 </div>
-            </div>
 
-            <div className="pt-6">
-                <ValidatedFloatingInput
-                    label="Memorie"
-                    value={content}
-                    height="h-55"
-                    onChange={(e) => setContent(e.target.value)}
-                />
-            </div>
+                <div className="pt-6">
+                    <ValidatedFloatingInput
+                        label="Memorie"
+                        value={content}
+                        height="h-40"
+                        onChange={(e) => setContent(e.target.value)}
+                    />
+                </div>
 
-            <div className="">
-                <EmojiSelector onSelect={(emoji: any) => setEmotion(emoji)} />
-            </div>
+                <div className="">
+                    <EmojiSelector onSelect={(emoji: any) => setEmotion(emoji)} />
+                </div>
 
-            <button onClick={handleSubmit}  type="button" className="
+                <button onClick={handleSubmit}  type="button" className="
                     text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-8 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800
                     w-fit place-self-end mt-7">
-                Finish
-            </button>
+                    Finish
+                </button>
 
-        </div>
+            </div>
+        </>
     )
 }
 

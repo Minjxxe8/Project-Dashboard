@@ -1,8 +1,10 @@
 //L'affichage de la page global avec les jars
 import Jars from "./components/Jar.tsx";
+import JarTable from "./components/JarTable.tsx";
+import MemoryFilter from "./components/Filters.tsx";
 
 const jarsData = [
-    { name: "Souveniiiiiirs" },
+    { name: "Souvenirs" },
     { name: "Potins" },
 ]
 
@@ -11,7 +13,8 @@ function JarPage() {
         <>
             <p className="text-center text-3xl underline">Jars</p>
             <Jars jars={jarsData} />
-            <div className="underline text-blue-500 cursor-pointer hover:text-purple-500 block">History</div>
+            <MemoryFilter />
+            <JarTable />
         </>
     )
 }

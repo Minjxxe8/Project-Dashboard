@@ -2,12 +2,14 @@ package database
 
 import (
 	"context"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
-	Project_Dashboard "project-dashboard"
+	"time"
 )
+
+var DB *pgxpool.Pool
 
 func Init() {
 	err := godotenv.Load()
@@ -20,18 +22,32 @@ func Init() {
 		log.Fatal("DATABASE_URL est vide, vérifie ton .env")
 	}
 
-	conn, err := pgx.Connect(context.Background(), dsn)
+	config, err := pgxpool.ParseConfig(dsn)
+	if err != nil {
+		log.Fatalf("Erreur config pool : %v", err)
+	}
+
+	config.MaxConns = 10
+	config.MinConns = 2
+	config.MaxConnLifetime = time.Hour
+	config.MaxConnIdleTime = time.Minute * 30
+
+	DB, err = pgxpool.NewWithConfig(context.Background(), config)
 	if err != nil {
 		log.Fatalf("Échec de connexion à la base : %v", err)
 	}
-	defer conn.Close(context.Background())
 
 	var version string
-	if err := conn.QueryRow(context.Background(), "SELECT version()").Scan(&version); err != nil {
+	if err := DB.QueryRow(context.Background(), "SELECT version()").Scan(&version); err != nil {
 		log.Fatalf("Requête échouée : %v", err)
 	}
 
 	log.Println("Connecté à :", version)
 
-	Project_Dashboard.RunServer(conn)
+}
+
+func Close() {
+	if DB != nil {
+		DB.Close()
+	}
 }

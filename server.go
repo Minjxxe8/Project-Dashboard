@@ -2,40 +2,12 @@ package Project_Dashboard
 
 import (
 	"encoding/json"
-	"fmt"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"log"
 	"net/http"
+	"project-dashboard/internal/jar"
+	"project-dashboard/internal/reviews"
 )
-
-type Memory struct {
-	Name    string `json:"name"`
-	Date    string `json:"date"`
-	Content string `json:"content"`
-	Title   string `json:"title"`
-	Emotion string `json:"emotion"`
-	Jar     string `json:"jar"`
-}
-
-func handleMemoryPost(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("➡️ Requête reçue sur /api/memories")
-
-	if r.Method != http.MethodPost {
-		http.Error(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
-		return
-	}
-
-	var mem Memory
-	if err := json.NewDecoder(r.Body).Decode(&mem); err != nil {
-		http.Error(w, "Erreur de décodage JSON", http.StatusBadRequest)
-		return
-	}
-
-	fmt.Printf("📦 Mémoire reçue : %+v\n", mem)
-
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
-}
 
 func corsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -50,11 +22,21 @@ func corsMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-func RunServer(conn *pgx.Conn) {
+func RunServer(pool *pgxpool.Pool) {
 	mux := http.NewServeMux()
 
-	//Les routes
-	mux.HandleFunc("/api/memories", handleMemoryPost)
+	mux.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+		json.NewEncoder(w).Encode(map[string]string{"message": "pong"})
+	})
+
+	// Jars Handlers
+	mux.HandleFunc("/api/memories", jar.AddMemoryHandler)
+	mux.HandleFunc("/api/memories/all", jar.GetAllMemoriesHandler)
+
+	// Reviews Handlers
+	mux.HandleFunc("/api/reviews", reviews.AddReviewHandler)
+	mux.HandleFunc("/api/reviews/all", reviews.GetAllReviewsHandler)
 
 	handler := corsMiddleware(mux)
 

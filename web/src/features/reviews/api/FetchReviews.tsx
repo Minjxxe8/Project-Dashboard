@@ -1,10 +1,26 @@
-import {reviews} from "../../typescript/ReviewsOptions.ts";
-
-//Il faudra l'importer de la data du backend
-export async function fetchReviews() {
-    return new Promise<typeof reviews>((resolve) => {
-        setTimeout(() => {
-            resolve(reviews);
-        }, 300);
-    });
+export async function fetchReviews(review: {
+    title: string;
+    rating: number;
+    occuredAt: string;
+    review: string;
+    category: number | undefined;
+    file: File | null;
+    emotion: string;
+}) {
+    try {
+        const response = await fetch("http://localhost:8080/api/reviews", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(review),
+        }); if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`API Error: ${errorText}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching reviews:", error);
+        throw error;
+    }
 }
